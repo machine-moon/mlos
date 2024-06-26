@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Set the home directory for virtual environments
-VENV_HOME="$HOME/venvs"
+VENV_HOME="$HOME/workspace/mlos/venvs"
+
 
 # Function to log messages with a timestamp
 log() {
@@ -170,8 +171,8 @@ if [ "$1" == "help" ]; then
     exit 0
 fi
 
-# Ensure at least two arguments are provided
-if [ $# -lt 2 ]; then
+# Ensure at least one arguments are provided
+if [ $# -lt 1 ]; then
     show_help
     exit 1
 fi
