@@ -6,11 +6,12 @@ This guide will walk you through the installation process of essential tools and
 
 ## Table of Contents
 1. [System Update and Python Installation](#system-update-and-python-installation)
-2. [Virtual Environment Setup](#virtual-environment-setup)
+2. [Git & Virtual Environment Setup](#git--virtual-environment-setup)
 3. [Installing Pandas and NumPy](#installing-pandas-and-numpy)
 4. [Installing PyTorch](#installing-pytorch)
 5. [Installing Gym and Its Features](#installing-gym-and-its-features)
 6. [CUDA Installation](#cuda-installation)
+7. [Base Folder Explanation](#base-folder-explanation)
 
 ## System Update and Python Installation
 First, ensure your system is up to date and install Python.
@@ -37,28 +38,43 @@ python3 --version
 pip3 --version
 ```
 
-## Virtual Environment Setup
+## Git & Virtual Environment Setup
 Create and activate a virtual environment to manage your project dependencies.
 
-### Step 1: Create a Virtual Environment
-Run the following command to create a virtual environment:
+### Step 1: Install Git
+Install Git if you haven't already:
 
 ```sh
-python3 -m venv mlos_env
+sudo apt-get install git
 ```
 
-### Step 2: Activate the Virtual Environment
-Activate the virtual environment:
+### Step 2: Configure SSH Keys
+Generate and configure SSH keys for Git:
 
 ```sh
-source mlos_env/bin/activate
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+ssh-add ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub
 ```
 
-### Step 3: Verify Virtual Environment Activation
-Your prompt should change to indicate that the virtual environment is active. You can verify this by running:
+Copy the output and add it to your GitHub account under SSH keys.
+
+### Step 3: Clone the Repository
+Clone your project repository:
 
 ```sh
-which python
+mkdir -p ~/workspace
+cd ~/workspace
+git clone git@github.com:your-username/mlos.git
+cd mlos
+```
+
+### Step 4: Create a Virtual Environment (Not Ready Yet)
+Navigate to the scripts directory and use the provided script to create a virtual environment:
+
+```sh
+cd scripts
+./env.sh start PROJECT_NAME
 ```
 
 ## Installing Pandas and NumPy
@@ -189,6 +205,43 @@ Verify the cuDNN installation:
 cat /usr/local/cuda/include/cudnn_version.h | grep CUDNN_MAJOR -A 2
 ```
 
-## Conclusion
-You have now set up your machine learning environment on Linux, including Python, virtual environments, Pandas, NumPy, PyTorch, Gym, and CUDA. You are ready to start developing and training machine learning models!
+## Base Folder Explanation
 
+- `cuda/`: Contains CUDA-related installation guides, samples, and tutorials.
+- `data/`: Stores raw and processed data.
+- `docs/`: Documentation and references, including cheat sheets and research documents.
+- `experiments/`: Notebooks, scripts, and results for various experiments.
+- `gym/`: Resources related to OpenAI Gym environments.
+- `models/`: Model architectures and saved models.
+- `nlp/`: NLP model scripts and notebooks.
+- `notebooks/`: Jupyter notebooks for experiments and exploratory analysis.
+- `reinforcement_learning/`: Reinforcement learning algorithms and resources.
+- `scripts/`: Various utility scripts for environment setup, preprocessing, training, and evaluation.
+- `transformers/`: Transformer models and related notebooks.
+- `vision/`: Computer vision models and notebooks.
+
+## Contributing
+
+1. **Create a new branch:**
+
+   ```sh
+   git checkout -b feature-branch
+   ```
+
+2. **Make your changes and commit them:**
+
+   ```sh
+   git commit -m "Description of changes"
+   ```
+
+3. **Push to the branch:**
+
+   ```sh
+   git push origin feature-branch
+   ```
+
+4. **Submit a pull request.**
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
