@@ -1,33 +1,88 @@
-
 # Machine Learning on Linux Setup Guide
 
 ## Introduction
 This guide will walk you through the installation process of essential tools and libraries needed for machine learning on a Linux system. This includes installing Python, setting up a virtual environment, and installing popular ML libraries such as Pandas, NumPy, PyTorch, Gym, and CUDA.
 
 ## Table of Contents
-1. [System Update and Python Installation](#system-update-and-python-installation)
-2. [Git & Virtual Environment Setup](#git--virtual-environment-setup)
-3. [Installing Pandas and NumPy](#installing-pandas-and-numpy)
-4. [Installing PyTorch](#installing-pytorch)
-5. [Installing Gym and Its Features](#installing-gym-and-its-features)
-6. [CUDA Installation](#cuda-installation)
-7. [Base Folder Explanation](#base-folder-explanation)
+1. [Base Folder Explanation](#base-folder-explanation)
+2. [Contributing](#contributing)
+3. [Setting Up WSL](#setting-up-wsl)
+4. [Git](#git)
+5. [Virtual Environment Setup](#virtual-environment-setup-not-ready-yet)
+6. [Installing Pandas and NumPy](#installing-pandas-and-numpy)
+7. [Installing PyTorch](#installing-pytorch)
+8. [Installing Gym and Its Features](#installing-gym-and-its-features)
+9. [CUDA Installation](#cuda-installation)
 
-## System Update and Python Installation
-First, ensure your system is up to date and install Python.
 
-### Step 1: Update System
-Open your terminal and run the following commands to update your system:
+## Base Folder Explanation
+
+- `cuda/`: Contains CUDA-related installation guides, samples, and tutorials.
+- `data/`: Stores raw and processed data.
+- `docs/`: Documentation and references, including cheat sheets and research documents.
+- `experiments/`: Notebooks, scripts, and results for various experiments.
+- `gym/`: Resources related to OpenAI Gym environments.
+- `models/`: Model architectures and saved models.
+- `nlp/`: NLP model scripts and notebooks.
+- `notebooks/`: Jupyter notebooks for experiments and exploratory analysis.
+- `reinforcement_learning/`: Reinforcement learning algorithms and resources.
+- `scripts/`: Various utility scripts for environment setup, preprocessing, training, and evaluation.
+- `transformers/`: Transformer models and related notebooks.
+- `vision/`: Computer vision models and notebooks.
+
+## Contributing
+
+1. **Create a new branch:**
+
+   ```sh
+   git checkout -b feature-branch
+   ```
+
+2. **Make your changes and commit them:**
+
+   ```sh
+   git commit -m "Description of changes"
+   ```
+
+3. **Push to the branch:**
+
+   ```sh
+   git push origin feature-branch
+   ```
+
+4. **Submit a pull request.**
+
+## Setting Up WSL
+
+### Step 1: Set Up WSL 2
+Set WSL 2 as the default version:
+
+```sh
+wsl --set-default-version 2
+```
+
+### Step 2: Install Ubuntu (required)
+
+Open PowerShell as Administrator and run the following command to enable WSL:
+
+```sh
+wsl --install -d Ubuntu
+
+```
+
+### Step 3: Update and Upgrade Ubuntu
+Open the installed Linux distribution and update it:
 
 ```sh
 sudo apt-get update
 sudo apt-get upgrade
 ```
 
-### Step 2: Install Python
-Install Python, pip, and venv:
+### Step 4: Install Essential Tools
+Install necessary tools and libraries:
 
 ```sh
+sudo apt-get install build-essential
 sudo apt-get install python3 python3-pip python3-venv
 ```
 
@@ -38,7 +93,12 @@ python3 --version
 pip3 --version
 ```
 
-## Git & Virtual Environment Setup
+### Additional Resources
+- [WSL Documentation](https://docs.microsoft.com/en-us/windows/wsl/)
+- [WSL User Guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html)
+
+
+## Git
 Create and activate a virtual environment to manage your project dependencies.
 
 ### Step 1: Install Git
@@ -68,8 +128,7 @@ cd ~/workspace
 git clone git@github.com:your-username/mlos.git
 cd mlos
 ```
-
-### Step 4: Create a Virtual Environment (Not Ready Yet)
+## Virtual Environment Setup (Not Ready Yet)
 Navigate to the scripts directory and use the provided script to create a virtual environment:
 
 ```sh
@@ -77,7 +136,7 @@ cd scripts
 ./env.sh start PROJECT_NAME
 ```
 
-## Installing Pandas and NumPy
+## Installing Pandas and NumPy 
 Install Pandas and NumPy using pip.
 
 ### Step 1: Install Pandas
@@ -111,7 +170,7 @@ Follow the instructions from the [PyTorch official website](https://pytorch.org/
 Visit the [PyTorch installation page](https://pytorch.org/get-started/locally/) and select your preferences. For example, for CUDA 11.3, you would use:
 
 ```sh
-pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
 
 ### Step 2: Verify the Installation
@@ -154,93 +213,56 @@ print(gym.__version__)
 ## CUDA Installation
 CUDA is essential for leveraging the GPU for machine learning tasks. Below are the steps to install CUDA on your system.
 
-### Step 1: Add the NVIDIA Package Repository
-```sh
-sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
-sudo sh -c 'echo "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/cuda.list'
-```
+### Step 1: Download and Install CUDA Toolkit (Base & Driver Installer)
+Visit the [CUDA Downloads page](https://developer.nvidia.com/cuda-downloads) and select your operating system, architecture, distribution, and version. Follow the instructions provided for your specific setup.
 
-### Step 2: Install CUDA Toolkit
-Update the package lists and install the CUDA toolkit:
+**Note:** This guide assumes you are working in WSL. The setup process involves installing the base components within WSL, while the GPU driver is installed on the Windows host system.
+
+### Step 2: Install the NVIDIA Driver
+For WSL, you need the driver from: [NVIDIA Driver Downloads](https://www.nvidia.com/Download/index.aspx)
+
+### Step 3: Install CUDA Toolkit in WSL
+Run the following commands in your WSL terminal:
 
 ```sh
+wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-keyring_1.1-1_all.deb
+sudo dpkg -i cuda-keyring_1.1-1_all.deb
 sudo apt-get update
-sudo apt-get install -y cuda
+sudo apt-get -y install cuda-toolkit-12-5
 ```
 
-### Step 3: Set Environment Variables
-Add the following lines to your `~/.bashrc` file:
+### Post-installation Actions
+These actions must be manually performed after installation before the CUDA Toolkit and Driver can be used.
+
+#### Environment Setup
+Add the CUDA path to the PATH variable:
 
 ```sh
-export PATH=/usr/local/cuda-10.2/bin${PATH:+:${PATH}}
-export LD_LIBRARY_PATH=/usr/local/cuda-10.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export PATH=/usr/local/cuda-12.5/bin${PATH:+:${PATH}}
 ```
 
-Source the `~/.bashrc` file to apply the changes:
+#### Verify the Installation
+Verify that the CUDA toolkit can find and communicate correctly with the CUDA-capable hardware by compiling and running some of the sample programs, located in [NVIDIA CUDA Samples](https://github.com/nvidia/cuda-samples).
+
+##### Verify the Driver Version
+If you installed the driver, verify that the correct version of it is loaded:
 
 ```sh
-source ~/.bashrc
-```
-
-### Step 4: Verify the Installation
-Verify the CUDA installation by running:
-
-```sh
+nvidia-smi
 nvcc --version
 ```
 
-### Step 5: Install cuDNN
-Download cuDNN from the NVIDIA website and install it. Move the downloaded files to the appropriate directories:
+### Additional Resources
+- [CUDA Documentation](https://docs.nvidia.com/cuda/)
+- [GPU-Accelerated Libraries](https://developer.nvidia.com/gpu-accelerated-libraries)
+- [WSL User Guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html)
+- [NVIDIA Open Source](https://developer.nvidia.com/open-source)
+- [CUDA Zone](https://developer.nvidia.com/cuda-zone)
+- [NVIDIA NGX](https://docs.nvidia.com/ngx/index.html)
 
-```sh
-sudo cp cuda/include/cudnn*.h /usr/local/cuda/include
-sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
-sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
-```
+For WSL users, get the Windows driver from [NVIDIA Compute Software Support on WSL 2](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#nvidia-compute-software-support-on-wsl-2), then get the toolkit and select WSL2 Ubuntu.
 
-### Step 6: Verify cuDNN Installation
-Verify the cuDNN installation:
 
-```sh
-cat /usr/local/cuda/include/cudnn_version.h | grep CUDNN_MAJOR -A 2
-```
-
-## Base Folder Explanation
-
-- `cuda/`: Contains CUDA-related installation guides, samples, and tutorials.
-- `data/`: Stores raw and processed data.
-- `docs/`: Documentation and references, including cheat sheets and research documents.
-- `experiments/`: Notebooks, scripts, and results for various experiments.
-- `gym/`: Resources related to OpenAI Gym environments.
-- `models/`: Model architectures and saved models.
-- `nlp/`: NLP model scripts and notebooks.
-- `notebooks/`: Jupyter notebooks for experiments and exploratory analysis.
-- `reinforcement_learning/`: Reinforcement learning algorithms and resources.
-- `scripts/`: Various utility scripts for environment setup, preprocessing, training, and evaluation.
-- `transformers/`: Transformer models and related notebooks.
-- `vision/`: Computer vision models and notebooks.
-
-## Contributing
-
-1. **Create a new branch:**
-
-   ```sh
-   git checkout -b feature-branch
-   ```
-
-2. **Make your changes and commit them:**
-
-   ```sh
-   git commit -m "Description of changes"
-   ```
-
-3. **Push to the branch:**
-
-   ```sh
-   git push origin feature-branch
-   ```
-
-4. **Submit a pull request.**
 
 ## License
 
