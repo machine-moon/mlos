@@ -38,16 +38,16 @@ int main(void) {
     float *g_x, *g_y; // gpu pointers
     
     // Allocate host memory
-    h_x = (float*)malloc(N * sizeof(float));
-    h_y = (float*)malloc(N * sizeof(float));
+    c_x = (float*)malloc(N * sizeof(float));
+    c_y = (float*)malloc(N * sizeof(float));
     
     // Initialize x and y arrays on the host with random numbers between 0 and 1
     for (int i = 0; i < N; i++) {
         unsigned int random_value;
         getrandom(&random_value, sizeof(random_value), 0);
-        h_x[i] = (float)random_value / UINT32_MAX;
+        c_x[i] = (float)random_value / UINT32_MAX;
         getrandom(&random_value, sizeof(random_value), 0);
-        h_y[i] = (float)random_value / UINT32_MAX;
+        y_y[i] = (float)random_value / UINT32_MAX;
     }
 
     // Allocate device memory
@@ -61,7 +61,7 @@ int main(void) {
     // Run kernel on 1M elements on the GPU
     int blockSize = 256;
     int numBlocks = (N + blockSize - 1) / blockSize;
-    add<<<numBlocks, blockSize>>>(N, x, y);
+    add<<<numBlocks, blockSize>>>(N, g_x, g_y);
 
     // Wait for GPU to finish before accessing on host
     cudaDeviceSynchronize();
@@ -73,8 +73,8 @@ int main(void) {
     std::cout << "Max error: " << maxError << std::endl;
 
     // Free memory
-    cudaFree(x);
-    cudaFree(y);
+    cudaFree(g_x);
+    cudaFree(g_y);
     
     return 0;
 }
