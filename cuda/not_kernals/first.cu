@@ -47,7 +47,7 @@ int main(void) {
         getrandom(&random_value, sizeof(random_value), 0);
         c_x[i] = (float)random_value / UINT32_MAX;
         getrandom(&random_value, sizeof(random_value), 0);
-        y_y[i] = (float)random_value / UINT32_MAX;
+        c_y[i] = (float)random_value / UINT32_MAX;
     }
 
     // Allocate device memory
