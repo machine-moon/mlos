@@ -31,8 +31,6 @@ int main(void) {
     // cudaMallocManaged(&x, N*sizeof(float)); // x->array[2M]
     // cudaMallocManaged(&y, N*sizeof(float));
 
-
-
     // better
     float *c_x, *c_y; // cpu pointers
     float *g_x, *g_y; // gpu pointers
