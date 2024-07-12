@@ -8,9 +8,9 @@ This guide will walk you through the installation process of essential tools and
 2. [Contributing](#contributing)
 3. [Setting Up WSL](#setting-up-wsl)
 4. [Git](#git)
-5. [Virtual Environment Setup](#virtual-environment-setup-not-ready-yet)
-6. [Installing Pandas and NumPy](#installing-pandas-and-numpy)
-7. [Installing PyTorch](#installing-pytorch)
+5. [Virtual Environment Setup](#setting-up-virtual-environments)
+6. [Installing PyTorch](#installing-pytorch)
+7. [Installing JAX](#installing-jax)
 8. [Installing Gym and Its Features](#installing-gym-and-its-features)
 9. [CUDA Installation](#cuda-installation)
 
@@ -84,6 +84,7 @@ Install necessary tools and libraries:
 ```sh
 sudo apt-get install build-essential
 sudo apt-get install python3 python3-pip python3-venv
+pip install --upgrade pip
 ```
 
 Verify the installation:
@@ -128,33 +129,32 @@ cd ~/workspace
 git clone git@github.com:your-username/mlos.git
 cd mlos
 ```
-## Virtual Environment Setup (Not Ready Yet)
-Navigate to the scripts directory and use the provided script to create a virtual environment:
+## Setting Up Virtual Environments
+To ensure a consistent and isolated Python environment for this project, it's recommended to use a virtual environment. Follow the steps below to set up a virtual environment and install the necessary dependencies listed in `requirements.txt`.
+
+### Step 1: Create a Virtual Environment
+Run the following command to create a virtual environment named `venv`:
 
 ```sh
-cd scripts
-./env.sh start PROJECT_NAME
+cd ~/workspace/mlos
+python3 -m venv venvs/venvName
 ```
 
-## Installing Pandas and NumPy 
-Install Pandas and NumPy using pip.
-
-### Step 1: Install Pandas
-Run the following command to install Pandas:
+### Step 2: Activate the Virtual Environment
 
 ```sh
-pip install pandas
+source venvs/venvName/bin/activate
 ```
 
-### Step 2: Install NumPy
-Run the following command to install NumPy:
+### Step 3: Install Dependencies
+Run the following command to install the required packages from `requirements.txt`:
 
 ```sh
-pip install numpy
+pip install -r requirements.txt
 ```
 
-### Step 3: Verify the Installation
-You can verify the installation by running a Python shell and importing the libraries:
+### Step 4: Verify the Installation
+You can verify the installation by running a Python shell and importing the libraries listed in `requirements.txt`:
 
 ```python
 import pandas as pd
@@ -162,6 +162,20 @@ import numpy as np
 print(pd.__version__)
 print(np.__version__)
 ```
+Or by running:
+
+```sh
+pip list
+```
+
+### Step 5: Deactivate the Virtual Environment
+When you are done working in the virtual environment, you can deactivate it using the following command:
+
+```sh
+deactivate
+```
+
+By following these steps, you can ensure a consistent development environment and avoid potential conflicts with other projects' dependencies.
 
 ## Installing PyTorch
 Follow the instructions from the [PyTorch official website](https://pytorch.org/get-started/locally/) to install PyTorch. Below is an example command for installing PyTorch with CUDA support.
@@ -170,7 +184,7 @@ Follow the instructions from the [PyTorch official website](https://pytorch.org/
 Visit the [PyTorch installation page](https://pytorch.org/get-started/locally/) and select your preferences. For example, for CUDA 11.3, you would use:
 
 ```sh
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip3 install torch torchvision torchaudio
 ```
 
 ### Step 2: Verify the Installation
@@ -207,8 +221,53 @@ Verify the installation by running a Python shell and importing Gym:
 
 ```python
 import gym
-print(gym.__version__)
 ```
+
+## Installing JAX
+Install JAX and its libraries FLAX, RLAX, and Optax using pip.
+
+### CPU-only (Linux/macOS/Windows)
+To install JAX for CPU-only usage, run the following commands:
+
+```sh
+pip install --upgrade pip
+pip install -U jax
+```
+
+### GPU (NVIDIA, CUDA 12)
+To install JAX with NVIDIA GPU support, run the following commands:
+
+```sh
+pip install --upgrade pip
+pip install -U "jax[cuda12]"
+```
+
+### TPU (Google Cloud TPU VM)
+To install JAX on a Google Cloud TPU VM, run the following commands:
+
+```sh
+pip install --upgrade pip
+pip install -U "jax[tpu]" -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
+```
+
+### Installing Machine Learning Libraries  (FLAX, RLAX, Optax)
+To install additional JAX libraries such as FLAX, RLAX, and Optax, run the following command:
+
+```sh
+pip install flax rlax optax
+```
+
+### Verify the Installation
+You can verify the installation by running a Python shell and importing the libraries:
+
+```python
+import jax
+import flax
+import rlax
+import optax
+```
+
+By following these steps, you can ensure that JAX is correctly installed in your virtual environment.
 
 ## CUDA Installation
 CUDA is essential for leveraging the GPU for machine learning tasks. Below are the steps to install CUDA on your system.
