@@ -1,2 +1,0 @@
-pip install gym stable-baselines3 sb3-contrib gym[atari] gym[classic_control] gym[box2d] gym[toy_text] gym[mujoco] tensorflow torch numpy pandas matplotlib scipy seaborn tensorboard ipython jupyter tqdm scikit-learn
- torch torchvision torchaudio
