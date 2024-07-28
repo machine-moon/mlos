@@ -12,6 +12,7 @@ from gymnasium import spaces, Env
 class EnvironmentConfig:
     def __init__(
         self,
+        seed: int,
         state_space: Any,
         action_space: Any,
         initial_state: Any,
@@ -19,6 +20,7 @@ class EnvironmentConfig:
         reward_function: Callable,
         transition_function: Callable,
     ):
+        self.seed = seed
         self.state_space = state_space
         self.action_space = action_space
         self.initial_state = initial_state
@@ -45,11 +47,14 @@ class MDPEnvironment(Env):
 
         self.reward_function = config.reward_function
         self.transition_function = config.transition_function
+        self.seed = config.seed
+
+        self.key = random.PRNGKey(self.seed)
 
         # setups, overide the functions with jax.jit
         self._transition = jax.jit(
             lambda state, action: self.transition_function(
-                state, action, self.state_space.shape
+                state, action, self.state_space.shape, self.rng()
             )
         )
         self._compute_reward = jax.jit(
@@ -59,6 +64,10 @@ class MDPEnvironment(Env):
 
         # Modify gym spaces
         # self.observation_space = spaces.Box(low=-jnp.inf, high=jnp.inf, shape=self.state_space.shape, dtype=jnp.float32)
+
+    def rng(self):
+        self.key, subkey = random.split(self.key)
+        return subkey
 
     def reset(self):
         """Resets the environment to the initial state and returns the initial observation."""
