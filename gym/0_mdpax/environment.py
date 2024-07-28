@@ -99,7 +99,7 @@ def f_is_done(self, state):
 """
 # --------------------------------------------
 
-
+"""
 # Define state space and action space
 env_width, env_height = 5, 5
 state_space = spaces.Box(
@@ -114,47 +114,6 @@ action_space = spaces.Discrete(action_space_n)
 
 initial_state = jnp.array([0, 0], dtype=jnp.int32)
 target_state = jnp.array([4, 4], dtype=jnp.int32)
-
-
-@jit
-def example_reward_function(state, goal_state):
-    """Define your reward logic here."""
-    # if jnp.array_equal(state, jnp.array([4, 4])):
-    #    return 10
-    # else:
-    #    return -1
-    is_goal = jnp.all(state == goal_state)
-    current_distance = jnp.linalg.norm(state - goal_state)
-    total_distance = jnp.sqrt(2)
-    
-    distance_reward = current_distance/total_distance * 3
-    
-    # Use jnp.where to select between goal reward and distance-based reward
-    reward = jnp.where(is_goal, 15.0, distance_reward)
-    return reward
-
-def example_transition_function(state, action, state_space_shape):
-    """Define your state transition logic here."""
-    x, y = state
-
-    def magic(key):
-        return random.uniform(random.PRNGKey(key), (1,2), minval=-1, maxval=1)[0]
-
-    def action_one(_):
-        return x+y
-
-    def action_two(_):
-        return jax.abs(x-y)
-
-    def action_three(_):
-        return x/y
-
-    def action_four(_):
-        return y/x
-
-    key = jax.lax.switch(action, [action_one,action_two,action_three,action_four], None)
-    x, y = magic(key) * key
-    return jnp.array([x, y])
 
 
 # Create the environment
@@ -194,3 +153,4 @@ for e in range(num_episodes):
             print(f"Total Reward: {episode_reward}")  # Print total reward per episode
             episode_reward = 0  # Reset episode reward
             break
+"""
