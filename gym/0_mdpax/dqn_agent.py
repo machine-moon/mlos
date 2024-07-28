@@ -43,9 +43,11 @@ class Agent:
         self.epsilon_decay = 0.995
         self.learning_rate = 0.001
 
-        self.key = jax.random.PRNGKey(0)
+        self.key = random.PRNGKey(0)
+        self.subkey = self.rng()
+
         self.model = DQNModel(state_size, action_size)
-        self.params = self.model.init(self.key, jnp.ones((1, state_size)))
+        self.params = self.model.init(self.subkey, jnp.ones((1, state_size)))
         self.optimizer = optax.adam(self.learning_rate)
         self.state = train_state.TrainState.create(
             apply_fn=self.model.apply, params=self.params, tx=self.optimizer
@@ -53,6 +55,10 @@ class Agent:
 
         # cant believe this worked
         self.model.apply = jit(self.model.apply)
+
+    def rng(self):
+        self.key, subkey = random.split(self.key)
+        return subkey
 
     def remember(self, state, action, reward, next_state, done):
         self.memory.append((state, action, reward, next_state, done))
