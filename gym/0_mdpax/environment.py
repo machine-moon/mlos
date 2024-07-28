@@ -116,32 +116,44 @@ initial_state = jnp.array([0, 0], dtype=jnp.int32)
 target_state = jnp.array([4, 4], dtype=jnp.int32)
 
 
+@jit
 def example_reward_function(state, goal_state):
     """Define your reward logic here."""
     # if jnp.array_equal(state, jnp.array([4, 4])):
     #    return 10
     # else:
     #    return -1
-    return jnp.where(jnp.array_equal(state, goal_state), 10, -1)
-
+    is_goal = jnp.all(state == goal_state)
+    current_distance = jnp.linalg.norm(state - goal_state)
+    total_distance = jnp.sqrt(2)
+    
+    distance_reward = current_distance/total_distance * 3
+    
+    # Use jnp.where to select between goal reward and distance-based reward
+    reward = jnp.where(is_goal, 15.0, distance_reward)
+    return reward
 
 def example_transition_function(state, action, state_space_shape):
     """Define your state transition logic here."""
     x, y = state
 
-    def move_up(_):
-        return jax.lax.max(0, x - 1), y
+    def magic(key):
+        return random.uniform(random.PRNGKey(key), (1,2), minval=-1, maxval=1)[0]
 
-    def move_down(_):
-        return jax.lax.min(state_space_shape[0] - 1, x + 1), y
+    def action_one(_):
+        return x+y
 
-    def move_left(_):
-        return x, jax.lax.max(0, y - 1)
+    def action_two(_):
+        return jax.abs(x-y)
 
-    def move_right(_):
-        return x, jax.lax.min(state_space_shape[1] - 1, y + 1)
+    def action_three(_):
+        return x/y
 
-    x, y = jax.lax.switch(action, [move_up, move_down, move_left, move_right], None)
+    def action_four(_):
+        return y/x
+
+    key = jax.lax.switch(action, [action_one,action_two,action_three,action_four], None)
+    x, y = magic(key) * key
     return jnp.array([x, y])
 
 
