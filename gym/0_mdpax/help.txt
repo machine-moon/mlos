@@ -1,0 +1,4 @@
+python train.py | tee logs.txt
+nohup python train.py > logs.txt 2>&1 &
+watch -n 1 nvidia-smi
+nvtop
