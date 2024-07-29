@@ -12,10 +12,10 @@ import wandb
 
 # ENV LOGIC (REWARD AND TRANSITION FUNCTIONS)
 # both will be jitted
-def example_reward_function(state, goal_state):
+def example_reward_function(state, target_state):
     """Define your reward logic here."""
-    is_goal = jnp.all(state == goal_state)
-    current_distance = jnp.linalg.norm(state - goal_state)
+    is_goal = jnp.all(jnp.abs(state - target_state) <= 0.1)
+    current_distance = jnp.linalg.norm(state - target_state)
     total_distance = jnp.sqrt(2)
     percentage = current_distance / total_distance
     distance_reward = jnp.where(percentage < 0.33, -1, jnp.where(percentage < 0.66, -2, -3))
@@ -65,7 +65,7 @@ def setup_environment():
     target_state = jnp.array([0.0, 0.0], dtype=dtype)
     initial_state = jnp.array([-1.0, 1.0], dtype=dtype)
 
-    seed = 0
+    seed = 0o020304 #my birthday :D
 
     config = EnvironmentConfig(
         seed=seed,
@@ -111,8 +111,8 @@ def train_agent(agent, env, num_episodes, num_iterations, batch_size, output_dir
     mean_episode_reward = 0
 
     wandb.init(
-        project="tarek-first-proj",
-        entity="t4r3k",
+        project="moon",
+        entity="t4r3k-carleton-university",
         config={
             "batch_size": batch_size,
             "num_episodes": num_episodes,
@@ -162,7 +162,7 @@ def train_agent(agent, env, num_episodes, num_iterations, batch_size, output_dir
             }
         )
 
-        if episode % 10 == 0:
+        if episode % 1000 == 0:
             save_agent(agent, output_dir, episode)
     wandb.finish()
 
@@ -182,8 +182,8 @@ if __name__ == "__main__":
     if not load_latest_agent(agent, output_dir):
         agent = Agent(state_size, action_size)
 
-    batch_size = 32  # increase by powers of 2
-    num_episodes = 5000  # Number of episodes to simulate
+    batch_size = 256  # increase by powers of 2
+    num_episodes = 10000  # Number of episodes to simulate
     num_iterations = 10  # Number of steps per episode
 
     train_agent(agent, env, num_episodes, num_iterations, batch_size, output_dir)

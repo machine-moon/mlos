@@ -1,0 +1,108 @@
+{
+    "os": "Linux-5.15.0-116-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "heartbeatAt": "2024-07-29T06:34:32.771592",
+    "startedAt": "2024-07-29T06:34:32.228639",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/library/workspace/mlos/gym/0_mdpax/train.py",
+    "codePathLocal": "train.py",
+    "codePath": "gym/0_mdpax/train.py",
+    "git": {
+        "remote": "git@github.com:machine-moon/mlos.git",
+        "commit": "ade4c23fa5e93329b6c8d1649846e759e3136b9c"
+    },
+    "email": "142579274+machine-moon@users.noreply.github.com",
+    "root": "/home/library/workspace/mlos",
+    "host": "candy",
+    "username": "titan",
+    "executable": "/home/library/workspace/mlos/venvs/jax/bin/python",
+    "cpu_count": 6,
+    "cpu_count_logical": 12,
+    "cpu_freq": {
+        "current": 2264.2169166666667,
+        "min": 1200.0,
+        "max": 3800.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3000.0,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 2500.0,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 2900.0,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 3800.0,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 3300.0,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 3170.603,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 1200.0,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 1200.0,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 2500.0,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 1200.0,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 1200.0,
+            "min": 1200.0,
+            "max": 3800.0
+        },
+        {
+            "current": 1200.0,
+            "min": 1200.0,
+            "max": 3800.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 97.87200164794922,
+            "used": 65.05864334106445
+        }
+    },
+    "gpu": "NVIDIA GeForce GTX 1650",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce GTX 1650",
+            "memory_total": 4294967296
+        }
+    ],
+    "memory": {
+        "total": 62.71550369262695
+    }
+}

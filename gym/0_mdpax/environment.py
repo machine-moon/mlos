@@ -54,19 +54,13 @@ class MDPEnvironment(Env):
 
         # setups, overide the functions with jax.jit
         self._transition = jax.jit(
-            lambda state, action, key: self.transition_function(
-                state, action, self.state_space.shape, key
-            )
+            lambda state, action, key: self.transition_function(state, action, self.state_space.shape, key)
         )
-        self._compute_reward = jax.jit(
-            lambda state: self.reward_function(state, self.target_state)
-        )
-        self._is_done = jax.jit(lambda state: jnp.array_equal(state, self.target_state))
+        self._compute_reward = jax.jit(lambda state: self.reward_function(state, self.target_state))
+        self._is_done = jax.jit(lambda state: (jnp.all(jnp.abs(state - self.target_state) <= 0.1)))
 
         self._initial = jax.jit(
-            lambda key: random.uniform(
-                key, (2,), minval=-1, maxval=1, dtype=self.state_space.dtype
-            )
+            lambda key: random.uniform(key, (2,), minval=-1, maxval=1, dtype=self.state_space.dtype)
         )
         # Modify gym spaces
         # self.observation_space = spaces.Box(low=-jnp.inf, high=jnp.inf, shape=self.state_space.shape, dtype=jnp.float32)
