@@ -50,11 +50,12 @@ class MDPEnvironment(Env):
         self.seed = config.seed
 
         self.key = random.PRNGKey(self.seed)
+        self.key, self.subkey = self.hydra(self.key)
 
         # setups, overide the functions with jax.jit
         self._transition = jax.jit(
-            lambda state, action: self.transition_function(
-                state, action, self.state_space.shape, self.rng()
+            lambda state, action, key: self.transition_function(
+                state, action, self.state_space.shape, key
             )
         )
         self._compute_reward = jax.jit(
@@ -62,16 +63,23 @@ class MDPEnvironment(Env):
         )
         self._is_done = jax.jit(lambda state: jnp.array_equal(state, self.target_state))
 
+        self._initial = jax.jit(
+            lambda key: random.uniform(
+                key, (2,), minval=-1, maxval=1, dtype=self.state_space.dtype
+            )
+        )
         # Modify gym spaces
         # self.observation_space = spaces.Box(low=-jnp.inf, high=jnp.inf, shape=self.state_space.shape, dtype=jnp.float32)
 
-    def rng(self):
-        self.key, subkey = random.split(self.key)
-        return subkey
+    def hydra(self, key):
+        # useage: self.key, self.subkey = self.hydra(self.key)
+        new_key, subkey = random.split(key)
+        return new_key, subkey
 
     def reset(self):
         """Resets the environment to the initial state and returns the initial observation."""
-        self.current_state = self.config.initial_state
+        self.key, self.subkey = self.hydra(self.key)
+        self.current_state = self._initial(self.subkey)
         reward = self._compute_reward(self.current_state)
         done = self._is_done(self.current_state)
         return self.current_state, reward, done
@@ -85,7 +93,8 @@ class MDPEnvironment(Env):
         Returns:
             (next_state, reward, done, info).
         """
-        next_state = self._transition(self.current_state, action)
+        self.key, self.subkey = self.hydra(self.key)
+        next_state = self._transition(self.current_state, action, self.subkey)
         reward = self._compute_reward(next_state)
         done = self._is_done(next_state)
         self.current_state = next_state
@@ -95,16 +104,7 @@ class MDPEnvironment(Env):
 # EXTRA METHODS INSTEAD OF ONE LINE FUNCTIONS
 # --------------------------------------------
 """
-@jax.jit
-def f_transition(self, state, action):
-    return self.transition_function(state, action, self.state_space.shape)
 
-@jax.jit
-def f_compute_reward(self, state):
-    return self.reward_function(state, self.target_state)
-@jax.jit
-def f_is_done(self, state):
-    return  jnp.array_equal(self.state, self.target_state)
 """
 # --------------------------------------------
 
