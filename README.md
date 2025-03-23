@@ -1,34 +1,24 @@
 # Machine Learning on Linux Setup Guide
 
 ## Introduction
-This guide will walk you through the installation process of essential tools and libraries needed for machine learning on a Linux system. This includes installing Python, setting up a virtual environment, and installing popular ML libraries such as Pandas, NumPy, PyTorch, Gym, and CUDA.
+This guide will walk you through the installation process of essential tools and libraries needed for machine learning on a Linux system. This includes installing Python, setting up a virtual environment, and installing popular ML libraries such as Pandas, NumPy, PyTorch, and Gymnasium.
 
 ## Table of Contents
-1. [Base Folder Explanation](#base-folder-explanation)
-2. [Contributing](#contributing)
-3. [Setting Up WSL](#setting-up-wsl)
-4. [Git](#git)
-5. [Virtual Environment Setup](#setting-up-virtual-environments)
-6. [Installing PyTorch](#installing-pytorch)
-7. [Installing JAX](#installing-jax)
-8. [Installing Gym and Its Features](#installing-gym-and-its-features)
-9. [CUDA Installation](#cuda-installation)
+1. [Contributing](#contributing)
+2. [Setting Up WSL](#setting-up-wsl)
+3. [Git](#git)
+4. [Virtual Environment Setup](#setting-up-virtual-environments)
+5. [Installing PyTorch](#installing-pytorch)
+6. [Installing JAX](#installing-jax)
+7. [Installing Gym and Its Features](#installing-gym-and-its-features)
 
 
-## Base Folder Explanation
+## base Folder Explanation
 
-- `cuda/`: Contains CUDA-related installation guides, samples, and tutorials.
-- `data/`: Stores raw and processed data.
-- `docs/`: Documentation and references, including cheat sheets and research documents.
-- `experiments/`: Notebooks, scripts, and results for various experiments.
-- `gym/`: Resources related to OpenAI Gym environments.
-- `models/`: Model architectures and saved models.
-- `nlp/`: NLP model scripts and notebooks.
-- `notebooks/`: Jupyter notebooks for experiments and exploratory analysis.
-- `reinforcement_learning/`: Reinforcement learning algorithms and resources.
-- `scripts/`: Various utility scripts for environment setup, preprocessing, training, and evaluation.
-- `transformers/`: Transformer models and related notebooks.
-- `vision/`: Computer vision models and notebooks.
+- `src/gym/`: Resources related to OpenAI Gym environments.
+- `src/rl/`: Reinforcement learning algorithms and resources.
+- `src/scripts/`: Various utility scripts for environment setup, preprocessing, training, and evaluation.
+- `venv/`: Virtual environment directory containing isolated Python environments for the project.
 
 ## Contributing
 
@@ -269,60 +259,5 @@ import optax
 
 By following these steps, you can ensure that JAX is correctly installed in your virtual environment.
 
-## CUDA Installation
-CUDA is essential for leveraging the GPU for machine learning tasks. Below are the steps to install CUDA on your system.
-
-### Step 1: Download and Install CUDA Toolkit (Base & Driver Installer)
-Visit the [CUDA Downloads page](https://developer.nvidia.com/cuda-downloads) and select your operating system, architecture, distribution, and version. Follow the instructions provided for your specific setup.
-
-**Note:** This guide assumes you are working in WSL. The setup process involves installing the base components within WSL, while the GPU driver is installed on the Windows host system.
-
-### Step 2: Install the NVIDIA Driver
-For WSL, you need the driver from: [NVIDIA Driver Downloads](https://www.nvidia.com/Download/index.aspx)
-
-### Step 3: Install CUDA Toolkit in WSL
-Run the following commands in your WSL terminal:
-
-```sh
-wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-keyring_1.1-1_all.deb
-sudo dpkg -i cuda-keyring_1.1-1_all.deb
-sudo apt-get update
-sudo apt-get -y install cuda-toolkit-12-5
-```
-
-### Post-installation Actions
-These actions must be manually performed after installation before the CUDA Toolkit and Driver can be used.
-
-#### Environment Setup
-Add the CUDA path to the PATH variable:
-
-```sh
-export PATH=/usr/local/cuda-12.5/bin${PATH:+:${PATH}}
-```
-
-#### Verify the Installation
-Verify that the CUDA toolkit can find and communicate correctly with the CUDA-capable hardware by compiling and running some of the sample programs, located in [NVIDIA CUDA Samples](https://github.com/nvidia/cuda-samples).
-
-##### Verify the Driver Version
-If you installed the driver, verify that the correct version of it is loaded:
-
-```sh
-nvidia-smi
-nvcc --version
-```
-
-### Additional Resources
-- [CUDA Documentation](https://docs.nvidia.com/cuda/)
-- [GPU-Accelerated Libraries](https://developer.nvidia.com/gpu-accelerated-libraries)
-- [WSL User Guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html)
-- [NVIDIA Open Source](https://developer.nvidia.com/open-source)
-- [CUDA Zone](https://developer.nvidia.com/cuda-zone)
-- [NVIDIA NGX](https://docs.nvidia.com/ngx/index.html)
-
-For WSL users, get the Windows driver from [NVIDIA Compute Software Support on WSL 2](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#nvidia-compute-software-support-on-wsl-2), then get the toolkit and select WSL2 Ubuntu.
-
-
-
 ## License
-
-This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
